@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Clair de Lune — Pour Claire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #04070f;
+            --gold: #c9a86c;
+            --gold-dim: #7a6030;
+            --text: #e5dac8;
+            --text-dim: #6a7888;
+        }
+
+        html, body { height: 100%; }
+
+        body {
+            min-height: 100%;
+            background: radial-gradient(ellipse at 30% 15%, #0c1428 0%, var(--bg) 65%);
+            color: var(--text);
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            overflow-x: hidden;
+        }
+
+        #stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #opening {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 2.2s ease;
+        }
+
+        #opening.out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .moon {
+            width: min(130px, 34vw);
+            height: min(130px, 34vw);
+            border-radius: 50%;
+            background: radial-gradient(circle at 36% 33%, #f8f0d2 0%, #d4b460 50%, #9a6c20 100%);
+            box-shadow:
+                0 0 40px rgba(210, 170, 70, 0.55),
+                0 0 90px rgba(210, 170, 70, 0.25),
+                0 0 180px rgba(210, 170, 70, 0.10);
+            animation: moonGlow 5s ease-in-out infinite alternate;
+            margin-bottom: 2.8rem;
+            position: relative;
+        }
+
+        .moon::before {
+            content: '';
+            position: absolute;
+            width: 22%; height: 22%;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.08);
+            top: 28%; left: 56%;
+        }
+
+        .moon::after {
+            content: '';
+            position: absolute;
+            width: 12%; height: 12%;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.07);
+            top: 55%; left: 35%;
+        }
+
+        @keyframes moonGlow {
+            from { box-shadow: 0 0 40px rgba(210,170,70,0.55), 0 0 90px rgba(210,170,70,0.25), 0 0 180px rgba(210,170,70,0.10); }
+            to   { box-shadow: 0 0 60px rgba(210,170,70,0.75), 0 0 130px rgba(210,170,70,0.38), 0 0 240px rgba(210,170,70,0.18); }
+        }
+
+        .title-claire {
+            font-size: clamp(3.8rem, 17vw, 8rem);
+            font-weight: 300;
+            letter-spacing: 0.28em;
+            text-indent: 0.28em;
+            color: #ecdcb0;
+            text-shadow: 0 0 25px rgba(225,195,110,0.65), 0 0 70px rgba(225,195,110,0.2);
+            line-height: 1;
+        }
+
+        .title-sub {
+            font-size: clamp(0.85rem, 3.2vw, 1.25rem);
+            font-style: italic;
+            font-weight: 300;
+            color: var(--text-dim);
+            letter-spacing: 0.38em;
+            text-indent: 0.38em;
+            margin-top: 0.65rem;
+        }
+
+        .title-city {
+            font-size: clamp(0.6rem, 1.8vw, 0.78rem);
+            letter-spacing: 0.6em;
+            text-indent: 0.6em;
+            color: #2e3b52;
+            text-transform: uppercase;
+            margin-top: 0.4rem;
+        }
+
+        .tap-prompt {
+            margin-top: 3.8rem;
+            font-size: clamp(0.65rem, 1.9vw, 0.82rem);
+            letter-spacing: 0.5em;
+            text-indent: 0.5em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            animation: breathe 2.8s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.25; }
+            50%       { opacity: 0.9; }
+        }
+
+        #music-fallback {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: rgba(201, 168, 108, 0.08);
+            border: 1px solid rgba(201, 168, 108, 0.25);
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-style: italic;
+            letter-spacing: 0.2em;
+            padding: 0.75rem 1.6rem;
+            border-radius: 2px;
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+            animation: breathe 2.8s ease-in-out infinite;
+        }
+
+        #letter {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            padding: 11vh 8vw 16vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+
+        #letter.show { opacity: 1; }
+
+        .top-rule {
+            width: 60%;
+            max-width: 300px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+            margin-bottom: 3rem;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        .top-rule.show { opacity: 0.45; }
+
+        .eyebrow {
+            font-size: clamp(0.58rem, 1.8vw, 0.72rem);
+            letter-spacing: 0.55em;
+            text-indent: 0.55em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 3.5rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        .eyebrow.show { opacity: 0.8; }
+
+        .line {
+            font-size: clamp(1.1rem, 4.2vw, 1.58rem);
+            font-weight: 300;
+            line-height: 1.9;
+            max-width: 540px;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 2s ease, transform 2s ease;
+        }
+
+        .line.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .line em {
+            color: #d4b060;
+            font-style: italic;
+        }
+
+        .mid-rule {
+            width: 1px;
+            height: 3rem;
+            background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+            margin: 0.8rem auto 2.2rem;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+        .mid-rule.show { opacity: 0.5; }
+
+        .closing {
+            font-size: clamp(1.25rem, 4.8vw, 1.9rem);
+            font-style: italic;
+            font-weight: 300;
+            color: var(--gold);
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.75;
+            margin-bottom: 2.2rem;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 2.2s ease, transform 2.2s ease;
+        }
+        .closing.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .from {
+            font-size: clamp(0.75rem, 2.2vw, 0.9rem);
+            letter-spacing: 0.25em;
+            color: var(--text-dim);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1.8s ease;
+        }
+        .from.show { opacity: 0.7; }
+
+        .clef {
+            margin-top: 2.8rem;
+            font-size: 2.2rem;
+            color: var(--gold-dim);
+            opacity: 0;
+            text-align: center;
+            transition: opacity 2.5s ease;
+        }
+        .clef.show { opacity: 0.4; }
+
+    </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<audio id="music" preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button id="music-fallback" onclick="retryMusic()">♫ tap to play music</button>
+
+<div id="opening">
+    <div class="moon"></div>
+    <div class="title-claire">Claire</div>
+    <div class="title-sub">Clair de Lune</div>
+    <div class="title-city">Paris · March 2026</div>
+    <div class="tap-prompt">tap to begin</div>
+</div>
+
+<div id="letter">
+    <div class="top-rule" id="rule"></div>
+    <div class="eyebrow" id="eyebrow">For Claire &nbsp;·&nbsp; Her 50th Birthday &nbsp;·&nbsp; Paris</div>
+
+    <p class="line" id="l1">
+        I hope you've had the most <em>magical</em> day.
+    </p>
+
+    <p class="line" id="l2">
+        You're in Paris, fifty, the city of love —<br>
+        with people carrying just a portion of the boundless love<br>
+        this world has for you, and that you create wherever you go.
+    </p>
+
+    <p class="line" id="l2b">
+        There is nowhere more perfect for you to be.
+    </p>
+
+    <div class="mid-rule" id="rule2"></div>
+
+    <p class="line" id="l3">
+        Thank you for all the years you've been my friend.<br>
+        For being a rock, a companion on this rollercoaster of life,<br>
+        an ear — a <em>light</em> in my life.
+    </p>
+
+    <p class="line" id="l4">
+        You brightened up my day and shone bright the first time I met you.<br>
+        And it is always that way, every single time we get together.
+    </p>
+
+    <p class="line" id="l5">
+        You keep me grounded and sure of myself.<br>
+        You help me believe in me.
+    </p>
+
+    <p class="line" id="l6">
+        You're the sister I never had.<br>
+        And, by your grace, Rana — the mother I never had.
+    </p>
+
+    <p class="line" id="l7">
+        You're there when I need you — and I will always be there for you.<br>
+        You, Jim, your kids, Rana…<br>everything that means anything to you.
+    </p>
+
+    <div class="mid-rule" id="rule3"></div>
+
+    <p class="line" id="l8">
+        I hope we get to share as many more years as we've enjoyed —<br>
+        knowing you're just a heartbeat, a text, a call, a drive or flight away.<br>
+        None of these is too long.<br>
+        No two points on this globe are far enough away<br>
+        to weaken how much it means to me to have you in my life.
+    </p>
+
+    <p class="closing" id="l9">
+        I love you — and I love that there is someone in this world<br>
+        who reminds me who I am,<br>and that I am <em>someone</em>.
+    </p>
+
+    <div class="from" id="l10">Your friend, Rob.<br><br>Always x<br><br><em>Happy birthday you beautiful &nbsp;x</em></div>
+
+    <div class="clef" id="clef">𝄞</div>
+</div>
+
+<script>
+(function() {
+    const c = document.getElementById('stars');
+    const ctx = c.getContext('2d');
+    let stars = [];
+
+    function init() {
+        c.width  = window.innerWidth;
+        c.height = window.innerHeight;
+        stars = [];
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * c.width,
+                y: Math.random() * c.height * 0.88,
+                r: Math.random() * 1.1 + 0.1,
+                a: Math.random() * 0.55 + 0.08,
+                speed: Math.random() * 0.006 + 0.002,
+                phase: Math.random() * Math.PI * 2
+            });
+        }
+    }
+
+    function draw(t) {
+        ctx.clearRect(0, 0, c.width, c.height);
+        stars.forEach(s => {
+            const alpha = s.a * (0.6 + 0.4 * Math.sin(t * s.speed + s.phase));
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(215, 208, 188, ${alpha})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+
+    init();
+    window.addEventListener('resize', init);
+    requestAnimationFrame(draw);
+})();
+
+const opening  = document.getElementById('opening');
+const letter   = document.getElementById('letter');
+const music    = document.getElementById('music');
+const fallback = document.getElementById('music-fallback');
+
+function retryMusic() {
+    music.play().then(() => {
+        fallback.style.display = 'none';
+    }).catch(() => {
+        // Still can't play — just stay quiet, don't navigate away
+    });
+}
+
+const steps = [
+    { id: 'rule',   delay: 300  },
+    { id: 'eyebrow',delay: 800  },
+    { id: 'l1',     delay: 2800 },
+    { id: 'l2',     delay: 7000 },
+    { id: 'l2b',    delay: 14000},
+    { id: 'rule2',  delay: 18500},
+    { id: 'l3',     delay: 19500},
+    { id: 'l4',     delay: 26000},
+    { id: 'l5',     delay: 32000},
+    { id: 'l6',     delay: 37000},
+    { id: 'l7',     delay: 42000},
+    { id: 'rule3',  delay: 48500},
+    { id: 'l8',     delay: 49500},
+    { id: 'l9',     delay: 58000},
+    { id: 'l10',    delay: 65000},
+    { id: 'clef',   delay: 70000},
+];
+
+let started = false;
+
+function begin() {
+    if (started) return;
+    started = true;
+
+    // Play must be called directly inside the gesture for Android Chrome
+    music.play().then(() => {
+        fallback.style.display = 'none';
+    }).catch(() => {
+        fallback.style.display = 'block';
+    });
+
+    opening.classList.add('out');
+
+    setTimeout(() => {
+        opening.style.display = 'none';
+        letter.classList.add('show');
+        steps.forEach(({ id, delay }) => {
+            setTimeout(() => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('show');
+            }, delay);
+        });
+    }, 2200);
+}
+
+opening.addEventListener('click', begin);
+opening.addEventListener('touchstart', e => {
+    e.preventDefault();
+    begin();
+}, { passive: false });
+</script>
+</body>
+</html>
