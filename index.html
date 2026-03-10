@@ -243,14 +243,20 @@
         }
 
         .from {
-            font-size: clamp(0.75rem, 2.2vw, 0.9rem);
-            letter-spacing: 0.25em;
-            color: var(--text-dim);
+            font-size: clamp(1.1rem, 4vw, 1.5rem);
+            font-style: italic;
+            letter-spacing: 0.15em;
+            color: #f0d080;
             text-align: center;
+            line-height: 2;
+            text-shadow:
+                0 0 20px rgba(240, 200, 80, 0.8),
+                0 0 50px rgba(240, 200, 80, 0.4),
+                0 0 90px rgba(240, 200, 80, 0.2);
             opacity: 0;
             transition: opacity 1.8s ease;
         }
-        .from.show { opacity: 0.7; }
+        .from.show { opacity: 1; }
 
         .clef {
             margin-top: 2.8rem;
@@ -284,7 +290,7 @@
 
 <div id="letter">
     <div class="top-rule" id="rule"></div>
-    <div class="eyebrow" id="eyebrow">For Claire &nbsp;·&nbsp; Her 50th Birthday &nbsp;·&nbsp; Paris</div>
+    <div class="eyebrow" id="eyebrow">For Claire &nbsp;·&nbsp; Your 50th Birthday &nbsp;·&nbsp; à Paris</div>
 
     <p class="line" id="l1">
         I hope you've had the most <em>magical</em> day.
@@ -293,7 +299,7 @@
     <p class="line" id="l2">
         You're in Paris, fifty, the city of love —<br>
         with people carrying just a portion of the boundless love<br>
-        this world has for you, and that you create wherever you go.
+        this world has for you, and that YOU create wherever you go.
     </p>
 
     <p class="line" id="l2b">
@@ -333,7 +339,7 @@
     <p class="line" id="l8">
         I hope we get to share as many more years as we've enjoyed —<br>
         knowing you're just a heartbeat, a text, a call, a drive or flight away.<br>
-        None of these is too long.<br>
+        None of these is too long...<br>
         No two points on this globe are far enough away<br>
         to weaken how much it means to me to have you in my life.
     </p>
@@ -343,7 +349,7 @@
         who reminds me who I am,<br>and that I am <em>someone</em>.
     </p>
 
-    <div class="from" id="l10">Your friend, Rob.<br><br>Always x<br><br><em>Happy birthday you beautiful &nbsp;x</em></div>
+    <div class="from" id="l10">Your friend, Rob.<br><br>Always x<br><br><em>Happy birthday you Beautiful. &nbsp;x</em></div>
 
     <div class="clef" id="clef">𝄞</div>
 </div>
